@@ -6,7 +6,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - "8080:8080"
+      - "8080:80"
     depends_on:
       - back-end
     networks:
@@ -27,25 +27,25 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: conta_certa_db 
-      MYSQL_USER: pi
-      MYSQL_PASSWORD: pi
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"  
     networks:
       - laravel
     volumes:
-      - ./.docker/db_data/bd:/var/lib/mysql # Persistência de dados do banco de dados.
+      - ./.docker/db_data/db:/var/lib/mysql # Persistência de dados do banco de dados.
       - ./.docker/db_data/sql:/docker-entrypoint-initdb.d # Script para criar tabelas.
 
   phpmyadmin:
     image: phpmyadmin:latest
     restart: always
     ports:
-      - "9090:9090"
+      - "9090:80"
     environment:
-      - PMA_ARBITRARY=1
+      PMA_ARBITRARY: 3306
     networks:
       - laravel
 
